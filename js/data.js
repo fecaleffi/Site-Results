@@ -1,7 +1,15 @@
 const SIMULATION_DATA = {
   sim5: {
-    label: "Simulação 5",
+    label: "Simulação n\u00ba 5",
     direction: "Sentido Leste",
+    info: {
+      rodovia: "BR-277",
+      kmInicial: "Km 80",
+      kmFinal: "Km 82",
+      pista: "Leste",
+      faixaInterrompida: "Faixa 2",
+      horario: "7h às 17h"
+    },
     atraso: {
       rows: [
         { hora: "7h",  display: "00:05:45", seconds: 345 },
@@ -30,12 +38,21 @@ const SIMULATION_DATA = {
         { hora: "14h - 15h", value: 1847.37 },
         { hora: "15h - 16h", value: 1847.38 },
         { hora: "16h - 17h", value: 1847.39 }
-      ]
+      ],
+      media: 1847.12
     }
   },
   sim6: {
-    label: "Simulação 6",
+    label: "Simulação n\u00ba 6",
     direction: "Sentido Oeste",
+    info: {
+      rodovia: "BR-277",
+      kmInicial: "Km 80",
+      kmFinal: "Km 82",
+      pista: "Oeste",
+      faixaInterrompida: "Faixa 2",
+      horario: "9h às 18h"
+    },
     atraso: {
       rows: [
         { hora: "9h",  display: "00:03:10", seconds: 190 },
@@ -62,7 +79,8 @@ const SIMULATION_DATA = {
         { hora: "15h - 16h", value: 4790.20 },
         { hora: "16h - 17h", value: 4790.11 },
         { hora: "17h - 18h", value: 4789.94 }
-      ]
+      ],
+      media: 4312.26
     }
   }
 };

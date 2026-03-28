@@ -1,3 +1,59 @@
+const PASSWORD_HASH = 'af35b82222c41c619025082a51e5228c94f6469cf888b1202a4517fa8f1b335a';
+
+async function sha256(text) {
+  const data = new TextEncoder().encode(text);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function tryLogin() {
+  const input = document.getElementById('password-input').value;
+  const hash = await sha256(input);
+  if (hash === PASSWORD_HASH) {
+    sessionStorage.setItem('authenticated', 'true');
+    showApp();
+  } else {
+    document.getElementById('login-error').hidden = false;
+    document.getElementById('password-input').value = '';
+    document.getElementById('password-input').focus();
+  }
+}
+
+function initLogin() {
+  if (sessionStorage.getItem('authenticated') === 'true') {
+    showApp();
+    return;
+  }
+
+  document.getElementById('login-btn').addEventListener('click', tryLogin);
+
+  document.getElementById('password-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') tryLogin();
+  });
+
+  document.getElementById('toggle-password').addEventListener('click', function() {
+    const input = document.getElementById('password-input');
+    const eyeOn = document.getElementById('eye-icon');
+    const eyeOff = document.getElementById('eye-off-icon');
+    if (input.type === 'password') {
+      input.type = 'text';
+      eyeOn.style.display = 'none';
+      eyeOff.style.display = 'block';
+    } else {
+      input.type = 'password';
+      eyeOn.style.display = 'block';
+      eyeOff.style.display = 'none';
+    }
+  });
+}
+
+function showApp() {
+  document.getElementById('login-screen').remove();
+  document.getElementById('app-content').hidden = false;
+  initApp();
+}
+
 let atrasoChartInstance = null;
 let filaChartInstance = null;
 
@@ -12,7 +68,7 @@ function populateSelector() {
   for (const [key, data] of Object.entries(SIMULATION_DATA)) {
     const option = document.createElement('option');
     option.value = key;
-    option.textContent = `${data.label} — ${data.direction}`;
+    option.textContent = data.label;
     selector.appendChild(option);
   }
 }
@@ -95,6 +151,9 @@ function renderFilaTable(fila) {
     <tbody>${fila.rows.map(r =>
       `<tr><td>${r.hora}</td><td>${r.value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td></tr>`
     ).join('')}</tbody>`;
+
+  document.getElementById('fila-media').textContent =
+    `Média: ${fila.media.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} m`;
 }
 
 function renderFilaChart(fila, direction) {
@@ -106,14 +165,26 @@ function renderFilaChart(fila, direction) {
     type: 'bar',
     data: {
       labels: fila.rows.map(r => r.hora),
-      datasets: [{
-        label: `Fila Máx — ${direction}`,
-        data: fila.rows.map(r => r.value),
-        backgroundColor: 'rgba(224, 90, 0, 0.7)',
-        borderColor: '#e05a00',
-        borderWidth: 1,
-        borderRadius: 4
-      }]
+      datasets: [
+        {
+          label: `Fila Máx — ${direction}`,
+          data: fila.rows.map(r => r.value),
+          backgroundColor: 'rgba(124, 58, 237, 0.7)',
+          borderColor: '#7c3aed',
+          borderWidth: 1,
+          borderRadius: 4
+        },
+        {
+          label: `Média (${fila.media.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} m)`,
+          data: fila.rows.map(() => fila.media),
+          type: 'line',
+          borderColor: '#f59e0b',
+          borderWidth: 2,
+          borderDash: [6, 4],
+          pointRadius: 0,
+          fill: false
+        }
+      ]
     },
     options: {
       responsive: true,
@@ -143,19 +214,36 @@ function renderFilaChart(fila, direction) {
   });
 }
 
+function renderSimInfo(info) {
+  const card = document.getElementById('sim-info');
+  const items = [
+    { label: 'Rodovia', value: info.rodovia },
+    { label: 'Trecho', value: `${info.kmInicial} — ${info.kmFinal}` },
+    { label: 'Pista', value: info.pista },
+    { label: 'Faixa Interrompida', value: info.faixaInterrompida },
+    { label: 'Horário', value: info.horario }
+  ];
+  card.innerHTML = items.map(i =>
+    `<div class="info-item"><span class="info-label">${i.label}</span><span class="info-value">${i.value}</span></div>`
+  ).join('');
+}
+
 function render(simKey) {
   const data = SIMULATION_DATA[simKey];
+  renderSimInfo(data.info);
   renderAtrasoTable(data.atraso);
   renderAtrasoChart(data.atraso, data.direction);
   renderFilaTable(data.fila);
   renderFilaChart(data.fila, data.direction);
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+function initApp() {
   populateSelector();
   const selector = document.getElementById('sim-selector');
   selector.addEventListener('change', function() {
     render(this.value);
   });
   render(selector.value);
-});
+}
+
+document.addEventListener('DOMContentLoaded', initLogin);

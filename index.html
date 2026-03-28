@@ -3,23 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resultados de Simulação de Tráfego</title>
+  <title>Resultados de Simulação - Rodovias EPR</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <div id="login-screen">
+    <div class="login-box">
+      <h1>Resultados de Simulação</h1>
+      <p>Digite a senha para acessar os resultados.</p>
+      <div id="login-form">
+        <div class="password-wrapper">
+          <input type="password" id="password-input" placeholder="Senha" autocomplete="off">
+          <button type="button" id="toggle-password" class="toggle-password" aria-label="Mostrar senha">
+            <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            <svg id="eye-off-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+          </button>
+        </div>
+        <button type="button" id="login-btn">Entrar</button>
+      </div>
+      <p id="login-error" class="login-error" hidden>Senha incorreta.</p>
+    </div>
+  </div>
+
+  <div id="app-content" hidden>
   <header>
-    <h1>Resultados de Simulação de Tráfego</h1>
+    <h1>Resultados de Simulação - Rodovias EPR</h1>
     <p class="subtitle">Análise de atraso e fila máxima por hora</p>
   </header>
 
   <main>
+    <div class="cronograma-link">
+      <a href="https://docs.google.com/spreadsheets/d/1CpxUG2X1GQq-fnlyBzg8L9XrG45pTC6YyxWYUbW_KSQ/edit?gid=0#gid=0" target="_blank" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        Acessar cronograma completo de simulações
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+      </a>
+    </div>
+
     <section id="controls">
       <label for="sim-selector">Selecione a simulação:</label>
       <select id="sim-selector"></select>
     </section>
+
+    <div id="sim-info" class="sim-info-card"></div>
 
     <section id="atraso-section">
       <h2>Atraso Médio por Hora</h2>
@@ -39,6 +68,7 @@
       <div class="content-grid">
         <div class="table-container">
           <table id="fila-table"></table>
+          <div id="fila-media" class="media-badge"></div>
         </div>
         <div class="chart-container">
           <canvas id="fila-chart"></canvas>
@@ -50,6 +80,8 @@
   <footer>
     <p>Estudo de Simulação de Tráfego</p>
   </footer>
+
+  </div><!-- /app-content -->
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
   <script src="js/data.js"></script>
