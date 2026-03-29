@@ -218,7 +218,7 @@ function renderSimInfo(info) {
   const card = document.getElementById('sim-info');
   const items = [
     { label: 'Rodovia', value: info.rodovia },
-    { label: 'Trecho', value: `${info.kmInicial} — ${info.kmFinal}` },
+    { label: 'Trecho Interrompido', value: `${info.kmInicial} — ${info.kmFinal}` },
     { label: 'Pista', value: info.pista },
     { label: 'Faixa Interrompida', value: info.faixaInterrompida },
     { label: 'Horário', value: info.horario }
@@ -226,6 +226,48 @@ function renderSimInfo(info) {
   card.innerHTML = items.map(i =>
     `<div class="info-item"><span class="info-label">${i.label}</span><span class="info-value">${i.value}</span></div>`
   ).join('');
+}
+
+const ROAD_END_KM = 84;
+const TRECHO_TOTAL = 8;
+
+function parseKm(str) {
+  return parseInt(str.replace(/[^\d]/g, ''), 10);
+}
+
+function renderTrechoDiagrama(info) {
+  const kmIni = parseKm(info.kmInicial);
+  const kmFim = parseKm(info.kmFinal);
+  const interrupted = kmFim - kmIni;
+  const freeAfter = ROAD_END_KM - kmFim;
+  const freeBefore = TRECHO_TOTAL - interrupted - freeAfter;
+
+  const container = document.getElementById('trecho-info');
+  let segments = '';
+
+  if (freeBefore > 0) {
+    segments += `<div class="trecho-segmento trecho-livre" style="flex:${freeBefore}">
+      <span class="trecho-dist">${freeBefore} km</span>
+      <span class="trecho-label">Fluxo livre</span>
+    </div>`;
+  }
+
+  segments += `<div class="trecho-segmento trecho-interrompido" style="flex:${interrupted}">
+    <span class="trecho-dist">${interrupted} km</span>
+    <span class="trecho-label">Faixa interrompida</span>
+  </div>`;
+
+  if (freeAfter > 0) {
+    segments += `<div class="trecho-segmento trecho-livre" style="flex:${freeAfter}">
+      <span class="trecho-dist">${freeAfter} km</span>
+      <span class="trecho-label">Fluxo livre</span>
+    </div>`;
+  }
+
+  container.innerHTML = `
+    <p class="trecho-titulo">O atraso no tempo de viagem é medido para um trecho de <strong>${TRECHO_TOTAL} km</strong></p>
+    <div class="trecho-diagrama">${segments}</div>
+    <div class="trecho-total"><span>Km ${kmIni - freeBefore} ao Km ${ROAD_END_KM} — Total: ${TRECHO_TOTAL} km</span></div>`;
 }
 
 function render(simKey) {
