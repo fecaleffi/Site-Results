@@ -1,4 +1,91 @@
 const SIMULATION_DATA = {
+  sim1: {
+    label: "Simula\u00e7\u00e3o n\u00ba 1",
+    direction: "Sentido Leste",
+    info: {
+      rodovia: "BR-277",
+      kmInicial: "Km 74",
+      kmFinal: "Km 76",
+      pista: "Leste",
+      faixaInterrompida: "Faixa 1",
+      horario: "7h \u00e0s 17h"
+    },
+    atraso: {
+      rows: [
+        { hora: "7h",  display: "00:05:25", seconds: 325 },
+        { hora: "8h",  display: "00:08:33", seconds: 513 },
+        { hora: "9h",  display: "00:09:05", seconds: 545 },
+        { hora: "10h", display: "00:09:27", seconds: 567 },
+        { hora: "11h", display: "00:08:23", seconds: 503 },
+        { hora: "12h", display: "00:08:33", seconds: 513 },
+        { hora: "13h", display: "00:08:59", seconds: 539 },
+        { hora: "14h", display: "00:08:58", seconds: 538 },
+        { hora: "15h", display: "00:09:10", seconds: 550 },
+        { hora: "16h", display: "00:08:36", seconds: 516 },
+        { hora: "17h", display: "00:07:07", seconds: 427 }
+      ],
+      media: { display: "00:08:23", seconds: 504 }
+    },
+    fila: {
+      rows: [
+        { hora: "7h - 8h",   value: 1522 },
+        { hora: "8h - 9h",   value: 1531 },
+        { hora: "9h - 10h",  value: 1531 },
+        { hora: "10h - 11h", value: 1531 },
+        { hora: "11h - 12h", value: 1532 },
+        { hora: "12h - 13h", value: 1535 },
+        { hora: "13h - 14h", value: 1534 },
+        { hora: "14h - 15h", value: 1534 },
+        { hora: "15h - 16h", value: 1533 },
+        { hora: "16h - 17h", value: 1531 }
+      ],
+      media: 1531
+    }
+  },
+
+  sim2: {
+    label: "Simula\u00e7\u00e3o n\u00ba 2",
+    direction: "Sentido Oeste",
+    info: {
+      rodovia: "BR-277",
+      kmInicial: "Km 74",
+      kmFinal: "Km 76",
+      pista: "Oeste",
+      faixaInterrompida: "Faixa 1",
+      horario: "9h \u00e0s 18h"
+    },
+    atraso: {
+      rows: [
+        { hora: "9h",  display: "00:02:46", seconds: 166 },
+        { hora: "10h", display: "00:06:04", seconds: 364 },
+        { hora: "11h", display: "00:10:48", seconds: 648 },
+        { hora: "12h", display: "00:12:07", seconds: 727 },
+        { hora: "13h", display: "00:11:36", seconds: 696 },
+        { hora: "14h", display: "00:10:52", seconds: 652 },
+        { hora: "15h", display: "00:11:32", seconds: 692 },
+        { hora: "16h", display: "00:12:50", seconds: 770 },
+        { hora: "17h", display: "00:11:07", seconds: 667 },
+        { hora: "18h", display: "00:09:57", seconds: 597 }
+      ],
+      media: { display: "00:09:58", seconds: 598 }
+    },
+    fila: {
+      rows: [
+        { hora: "9h - 10h",  value: 1503 },
+        { hora: "10h - 11h", value: 2090 },
+        { hora: "11h - 12h", value: 2118 },
+        { hora: "12h - 13h", value: 2041 },
+        { hora: "13h - 14h", value: 2132 },
+        { hora: "14h - 15h", value: 2026 },
+        { hora: "15h - 16h", value: 2492 },
+        { hora: "16h - 17h", value: 2176 },
+        { hora: "17h - 18h", value: 2331 }
+      ],
+      media: 2101
+    }
+  },
+
+
   sim3: {
     label: "Simula\u00e7\u00e3o n\u00ba 3",
     direction: "Sentido Leste",
