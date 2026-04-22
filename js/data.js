@@ -28,8 +28,8 @@ const SIMULATION_DATA = {
     },
     fila: {
       rows: [
-        { hora: "7h - 8h",   value: 188 },
-        { hora: "8h - 9h",   value: 201 },
+        { hora: "7h - 8h",   value: 588 },
+        { hora: "8h - 9h",   value: 501 },
         { hora: "9h - 10h",  value: 508 },
         { hora: "10h - 11h", value: 531 },
         { hora: "11h - 12h", value: 532 },
@@ -39,7 +39,7 @@ const SIMULATION_DATA = {
         { hora: "15h - 16h", value: 811 },
         { hora: "16h - 17h", value: 756 }
       ],
-      media: 580
+      media: 651
     }
   },
 
