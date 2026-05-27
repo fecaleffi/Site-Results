@@ -4,8 +4,8 @@ const SIMULATION_DATA = {
     direction: "Sentido Leste",
     info: {
       rodovia: "BR-277 (Dia 13/04/26)",
-      kmInicial: "Km 74",
-      kmFinal: "Km 74,5",
+      kmInicial: "Km 74,5",
+      kmFinal: "Km 75",
       pista: "Leste",
       faixaInterrompida: "Faixa 1",
       horario: "7h \u00e0s 17h"
