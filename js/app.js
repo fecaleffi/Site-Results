@@ -73,8 +73,33 @@ function populateSelector() {
   }
 }
 
+function hexToRgba(hex, alpha) {
+  const h = hex.replace('#', '');
+  const r = parseInt(h.substring(0, 2), 16);
+  const g = parseInt(h.substring(2, 4), 16);
+  const b = parseInt(h.substring(4, 6), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
 function renderAtrasoTable(atraso) {
   const table = document.getElementById('atraso-table');
+
+  if (atraso.series) {
+    table.innerHTML = `
+      <thead><tr><th>Hora</th>${atraso.series.map(s =>
+        `<th>${s.name}</th>`).join('')}</tr></thead>
+      <tbody>${atraso.rows.map((r, i) =>
+        `<tr><td>${r.hora}</td>${atraso.series.map(s =>
+          `<td>${s.data[i].display}</td>`).join('')}</tr>`
+      ).join('')}</tbody>`;
+
+    document.getElementById('atraso-media').innerHTML =
+      atraso.series.map(s =>
+        `<span class="media-item" style="color:${s.color}">${s.name}: ${s.media.display}</span>`
+      ).join('');
+    return;
+  }
+
   table.innerHTML = `
     <thead><tr><th>Hora</th><th>Atraso</th></tr></thead>
     <tbody>${atraso.rows.map(r =>
@@ -90,33 +115,49 @@ function renderAtrasoChart(atraso, direction) {
 
   const ctx = document.getElementById('atraso-chart').getContext('2d');
   const labels = atraso.rows.map(r => r.hora);
-  const values = atraso.rows.map(r => r.seconds);
-  const mediaLine = atraso.rows.map(() => atraso.media.seconds);
+
+  let datasets;
+  const chartType = atraso.series ? 'line' : 'bar';
+  if (atraso.series) {
+    datasets = atraso.series.map(s => ({
+      label: s.name,
+      data: s.data.map(d => d.seconds),
+      backgroundColor: hexToRgba(s.color, 0.15),
+      borderColor: s.color,
+      borderWidth: 2,
+      pointRadius: 3,
+      pointBackgroundColor: s.color,
+      tension: 0.3,
+      fill: false
+    }));
+  } else {
+    datasets = [
+      {
+        label: `Atraso — ${direction}`,
+        data: atraso.rows.map(r => r.seconds),
+        backgroundColor: 'rgba(26, 86, 219, 0.7)',
+        borderColor: '#1a56db',
+        borderWidth: 1,
+        borderRadius: 4
+      },
+      {
+        label: `Média (${atraso.media.display})`,
+        data: atraso.rows.map(() => atraso.media.seconds),
+        type: 'line',
+        borderColor: '#f59e0b',
+        borderWidth: 2,
+        borderDash: [6, 4],
+        pointRadius: 0,
+        fill: false
+      }
+    ];
+  }
 
   atrasoChartInstance = new Chart(ctx, {
-    type: 'bar',
+    type: chartType,
     data: {
       labels,
-      datasets: [
-        {
-          label: `Atraso — ${direction}`,
-          data: values,
-          backgroundColor: 'rgba(26, 86, 219, 0.7)',
-          borderColor: '#1a56db',
-          borderWidth: 1,
-          borderRadius: 4
-        },
-        {
-          label: `Média (${atraso.media.display})`,
-          data: mediaLine,
-          type: 'line',
-          borderColor: '#f59e0b',
-          borderWidth: 2,
-          borderDash: [6, 4],
-          pointRadius: 0,
-          fill: false
-        }
-      ]
+      datasets
     },
     options: {
       responsive: true,
@@ -144,16 +185,37 @@ function renderAtrasoChart(atraso, direction) {
   });
 }
 
+function fmtMeters(v) {
+  return v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
 function renderFilaTable(fila) {
   const table = document.getElementById('fila-table');
+
+  if (fila.series) {
+    table.innerHTML = `
+      <thead><tr><th>Hora</th>${fila.series.map(s =>
+        `<th>${s.name}</th>`).join('')}</tr></thead>
+      <tbody>${fila.rows.map((r, i) =>
+        `<tr><td>${r.hora}</td>${fila.series.map(s =>
+          `<td>${fmtMeters(s.data[i])}</td>`).join('')}</tr>`
+      ).join('')}</tbody>`;
+
+    document.getElementById('fila-media').innerHTML =
+      fila.series.map(s =>
+        `<span class="media-item" style="color:${s.color}">${s.name}: ${fmtMeters(s.media)} m</span>`
+      ).join('');
+    return;
+  }
+
   table.innerHTML = `
     <thead><tr><th>Hora</th><th>Fila Máx (metros)</th></tr></thead>
     <tbody>${fila.rows.map(r =>
-      `<tr><td>${r.hora}</td><td>${r.value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td></tr>`
+      `<tr><td>${r.hora}</td><td>${fmtMeters(r.value)}</td></tr>`
     ).join('')}</tbody>`;
 
   document.getElementById('fila-media').textContent =
-    `Média: ${fila.media.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} m`;
+    `Média: ${fmtMeters(fila.media)} m`;
 }
 
 function renderFilaChart(fila, direction) {
@@ -161,30 +223,48 @@ function renderFilaChart(fila, direction) {
 
   const ctx = document.getElementById('fila-chart').getContext('2d');
 
+  let datasets;
+  const chartType = fila.series ? 'line' : 'bar';
+  if (fila.series) {
+    datasets = fila.series.map(s => ({
+      label: s.name,
+      data: s.data,
+      backgroundColor: hexToRgba(s.color, 0.15),
+      borderColor: s.color,
+      borderWidth: 2,
+      pointRadius: 2,
+      pointBackgroundColor: s.color,
+      tension: 0.3,
+      fill: false
+    }));
+  } else {
+    datasets = [
+      {
+        label: `Fila Máx — ${direction}`,
+        data: fila.rows.map(r => r.value),
+        backgroundColor: 'rgba(124, 58, 237, 0.7)',
+        borderColor: '#7c3aed',
+        borderWidth: 1,
+        borderRadius: 4
+      },
+      {
+        label: `Média (${fila.media.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} m)`,
+        data: fila.rows.map(() => fila.media),
+        type: 'line',
+        borderColor: '#f59e0b',
+        borderWidth: 2,
+        borderDash: [6, 4],
+        pointRadius: 0,
+        fill: false
+      }
+    ];
+  }
+
   filaChartInstance = new Chart(ctx, {
-    type: 'bar',
+    type: chartType,
     data: {
       labels: fila.rows.map(r => r.hora),
-      datasets: [
-        {
-          label: `Fila Máx — ${direction}`,
-          data: fila.rows.map(r => r.value),
-          backgroundColor: 'rgba(124, 58, 237, 0.7)',
-          borderColor: '#7c3aed',
-          borderWidth: 1,
-          borderRadius: 4
-        },
-        {
-          label: `Média (${fila.media.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} m)`,
-          data: fila.rows.map(() => fila.media),
-          type: 'line',
-          borderColor: '#f59e0b',
-          borderWidth: 2,
-          borderDash: [6, 4],
-          pointRadius: 0,
-          fill: false
-        }
-      ]
+      datasets
     },
     options: {
       responsive: true,

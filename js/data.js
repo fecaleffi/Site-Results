@@ -1,6 +1,6 @@
 const SIMULATION_DATA = {
   sim1: {
-    label: "Simula\u00e7\u00e3o n\u00ba 1",
+    label: "Simulação nº 1",
     direction: "Sentido Leste",
     info: {
       rodovia: "BR-277 (Dia 13/04/26)",
@@ -8,7 +8,7 @@ const SIMULATION_DATA = {
       kmFinal: "Km 75",
       pista: "Leste",
       faixaInterrompida: "Faixa 1",
-      horario: "7h \u00e0s 17h"
+      horario: "7h às 17h"
     },
     atraso: {
       rows: [
@@ -44,7 +44,7 @@ const SIMULATION_DATA = {
   },
 
   sim2: {
-    label: "Simula\u00e7\u00e3o n\u00ba 2",
+    label: "Simulação nº 2",
     direction: "Sentido Oeste",
     info: {
       rodovia: "BR-277",
@@ -52,7 +52,7 @@ const SIMULATION_DATA = {
       kmFinal: "Km 42,150",
       pista: "Leste",
       faixaInterrompida: "Faixa 1",
-      horario: "8h \u00e0s 18h"
+      horario: "8h às 18h"
     },
     atraso: {
       rows: [
@@ -87,6 +87,98 @@ const SIMULATION_DATA = {
     }
   },
 
+  sim3: {
+    label: "Simulação nº 3",
+    direction: "Comparação por tempo de bloqueio",
+    info: {
+      rodovia: "BR-277",
+      kmInicial: "Km 71",
+      kmFinal: "Km 71",
+      pista: "Leste",
+      faixaInterrompida: "Bloqueio Total",
+      horario: "10h"
+    },
+    atraso: {
+      rows: [
+        { hora: "09:00-09:15" }, { hora: "09:15-09:30" }, { hora: "09:30-09:45" }, { hora: "09:45-10:00" }, { hora: "10:00-10:15" }, { hora: "10:15-10:30" }, { hora: "10:30-10:45" }, { hora: "10:45-11:00" }
+      ],
+      series: [
+        {
+          name: "Bloqueio 10 min",
+          color: "#1a56db",
+          data: [
+            { display: "00:00:24", seconds: 24 }, // 09:00-09:15
+            { display: "00:00:29", seconds: 29 }, // 09:15-09:30
+            { display: "00:00:33", seconds: 33 }, // 09:30-09:45
+            { display: "00:00:27", seconds: 27 }, // 09:45-10:00
+            { display: "00:08:42", seconds: 522 }, // 10:00-10:15
+            { display: "00:03:06", seconds: 186 }, // 10:15-10:30
+            { display: "00:00:35", seconds: 35 }, // 10:30-10:45
+            { display: "00:00:32", seconds: 32 } // 10:45-11:00
+          ],
+          media: { display: "00:01:51", seconds: 111 }
+        },
+        {
+          name: "Bloqueio 15 min",
+          color: "#059669",
+          data: [
+            { display: "00:00:24", seconds: 24 }, // 09:00-09:15
+            { display: "00:00:29", seconds: 29 }, // 09:15-09:30
+            { display: "00:00:33", seconds: 33 }, // 09:30-09:45
+            { display: "00:00:27", seconds: 27 }, // 09:45-10:00
+            { display: "00:10:27", seconds: 627 }, // 10:00-10:15
+            { display: "00:02:27", seconds: 147 }, // 10:15-10:30
+            { display: "00:00:32", seconds: 32 }, // 10:30-10:45
+            { display: "00:00:31", seconds: 31 } // 10:45-11:00
+          ],
+          media: { display: "00:01:59", seconds: 119 }
+        },
+        {
+          name: "Bloqueio 30 min",
+          color: "#7c3aed",
+          data: [
+            { display: "00:00:24", seconds: 24 }, // 09:00-09:15
+            { display: "00:00:29", seconds: 29 }, // 09:15-09:30
+            { display: "00:00:33", seconds: 33 }, // 09:30-09:45
+            { display: "00:00:27", seconds: 27 }, // 09:45-10:00
+            { display: "00:25:28", seconds: 1528 }, // 10:00-10:15
+            { display: "00:17:18", seconds: 1038 }, // 10:15-10:30
+            { display: "00:08:59", seconds: 539 }, // 10:30-10:45
+            { display: "00:02:15", seconds: 135 } // 10:45-11:00
+          ],
+          media: { display: "00:06:45", seconds: 405 }
+        }
+      ]
+    },
+    fila: {
+      rows: [
+        { hora: "09:05" }, { hora: "09:10" }, { hora: "09:15" }, { hora: "09:20" }, { hora: "09:25" }, { hora: "09:30" },
+        { hora: "09:35" }, { hora: "09:40" }, { hora: "09:45" }, { hora: "09:50" }, { hora: "09:55" }, { hora: "10:00" },
+        { hora: "10:05" }, { hora: "10:10" }, { hora: "10:15" }, { hora: "10:20" }, { hora: "10:25" }, { hora: "10:30" },
+        { hora: "10:35" }, { hora: "10:40" }, { hora: "10:45" }, { hora: "10:50" }, { hora: "10:55" }, { hora: "11:00" },
+        { hora: "11:05" }, { hora: "11:10" }, { hora: "11:15" }, { hora: "11:20" }, { hora: "11:25" }, { hora: "11:30" }
+      ],
+      series: [
+        {
+          name: "Bloqueio 10 min",
+          color: "#1a56db",
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 662.6, 1330.48, 2061.62, 2549.85, 77.53, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          media: 222.74
+        },
+        {
+          name: "Bloqueio 15 min",
+          color: "#059669",
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 662.6, 1330.48, 2061.62, 2834.91, 3502.68, 4035.12, 54.23, 73.14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+          media: 485.16
+        },
+        {
+          name: "Bloqueio 30 min",
+          color: "#7c3aed",
+          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 662.6, 1330.48, 2061.62, 2834.91, 3503.19, 4418.58, 5134.49, 6138.96, 6966.88, 7685.94, 8524.2, 9249.09, 9314.04, 8079.79, 7291.29, 7175.68, 7176.01, 7060.84, 0, 0, 0],
+          media: 3486.95
+        }
+      ]
+    }
+  }
 
-  
 };

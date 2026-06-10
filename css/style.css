@@ -332,6 +332,14 @@ tbody tr:hover {
   font-size: 0.95rem;
 }
 
+.media-badge .media-item {
+  display: block;
+}
+
+.media-badge .media-item + .media-item {
+  margin-top: 0.25rem;
+}
+
 .chart-container {
   background: var(--color-surface);
   border-radius: var(--radius);
